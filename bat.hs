@@ -10,18 +10,10 @@ getCapacitance1 = getNumber . head . filter (=~ "remaining capacity:") . lines
 getCapacitance2 :: String -> Double
 getCapacitance2 = getNumber . head . filter (=~ "design capacity:") . lines
 
-
-
-
 main = do
   state <- readFile "/proc/acpi/battery/BAT0/state"
-  print $ getCapacitance1 state 
   info <- readFile "/proc/acpi/battery/BAT0/info"
-  print $ getCapacitance2 info 
-
-
-
-
+  print $ show (floor $ (getCapacitance1 state ) / (getCapacitance2 info ) * 100) ++ "%"
   
      
 
