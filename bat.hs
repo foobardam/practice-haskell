@@ -4,16 +4,13 @@ import Text.Regex.Posix
 getNumber :: String -> Double
 getNumber str = read (str =~ "[0-9]+" :: String) :: Double
 
-getCapacitance1 :: String -> Double
-getCapacitance1 = getNumber . head . filter (=~ "remaining capacity:") . lines 
-
-getCapacitance2 :: String -> Double
-getCapacitance2 = getNumber . head . filter (=~ "design capacity:") . lines
+getCapacitance :: String -> String -> Double
+getCapacitance ptn lns = getNumber . head . filter (=~ ptn) $ lines lns
 
 main = do
   state <- readFile "/proc/acpi/battery/BAT0/state"
   info <- readFile "/proc/acpi/battery/BAT0/info"
-  print $ show (floor $ (getCapacitance1 state ) / (getCapacitance2 info ) * 100) ++ "%"
+  print $ show (floor $ (getCapacitance "remaining capacity:" state ) / (getCapacitance "design capacity:" info ) * 100) ++ "%"
   
      
 
