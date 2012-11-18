@@ -12,7 +12,14 @@ main = do
   let current = getCapacitance "remaining capacity:" state
   info <- readFile "/proc/acpi/battery/BAT0/info"
   let full = getCapacitance "design capacity:" info 
-  putStr $ show (floor $ current / full * 100) ++ "%\n"
+  let last_full = getCapacitance "last full capacity:" info 
+  let remain = show $ floor $ current / last_full * 100
+  let batPerform = show $ floor $ last_full / full * 100 
+
+  putStr $ remain  ++ "%(現在残量) 【" ++ batPerform  ++ "%(バッテリー性能)】\n"
+
+
+
 
   
      
